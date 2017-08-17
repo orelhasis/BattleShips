@@ -53,7 +53,7 @@ public class Main {
                     System.out.println("Thank you and Good-Bye!");
                     break;
                 default:
-                    System.out.println("Invalid input");
+                    System.out.println("Invalid input!");
                     break;
             }
 
