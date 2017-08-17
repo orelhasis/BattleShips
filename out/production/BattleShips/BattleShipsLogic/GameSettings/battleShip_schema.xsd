@@ -1,0 +1,57 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="BattleShipGame">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:string" name="GameType"/>
+        <xs:element type="xs:byte" name="boardSize"/>
+        <xs:element name="shipTypes">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="shipType" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="category"/>
+                    <xs:element type="xs:byte" name="amount"/>
+                    <xs:element type="xs:byte" name="length"/>
+                    <xs:element type="xs:byte" name="score"/>
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="id" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="boards">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="board" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="ship" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:string" name="shipTypeId"/>
+                          <xs:element name="position">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                  <xs:attribute type="xs:byte" name="x" use="optional"/>
+                                  <xs:attribute type="xs:byte" name="y" use="optional"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element type="xs:string" name="direction"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
