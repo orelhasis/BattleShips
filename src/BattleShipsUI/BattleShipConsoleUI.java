@@ -165,7 +165,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
         if(playerInput.length() != 2){
             resPoint.setX(-1);
             resPoint.setY(-1);
-        }k,jnlkjn
+        }
         else{
             resPoint.setY(playerInput.toCharArray()[0] - 'A');
             resPoint.setX(playerInput.toCharArray()[1] - '0' - 1);
