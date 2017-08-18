@@ -1,5 +1,5 @@
 package BattleShipsLogic.Definitions;
 
 public enum GameStatus {
-    RUN, OVER;
+    INIT,LOADED, RUN, OVER
 }
