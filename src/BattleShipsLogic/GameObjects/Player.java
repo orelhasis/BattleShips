@@ -9,7 +9,8 @@ public class Player {
     private int boardSize;
     private int score;
     private SeaItem[][] board;
-
+    private final int numOfShips;
+    private int remainingShips;
     /* -------------- Getters and setters -------------- */
 
     public PlayerName getName() {
@@ -36,6 +37,10 @@ public class Player {
         this.score = score;
     }
 
+    public void AddScore(int score) {
+        this.score += score;
+    }
+
     public SeaItem[][] getBoard() {
         return board;
     }
@@ -46,8 +51,8 @@ public class Player {
 
 
     /* -------------- Function members -------------- */
-    public Player(PlayerName name, int boardSize) {
-
+    public Player(PlayerName name, int boardSize, int numOfShips) {
+        this.numOfShips = this.remainingShips = numOfShips;
         this.name = name;
         this.boardSize = boardSize;
         this.score = 0;
@@ -86,19 +91,12 @@ public class Player {
     }
 
     public char[][] getPlayerTrackingGrid() {
-
         char[][] tracking = getEmptyBoardForPrint(boardSize);
-
-        int i,j;
-        for (i = 0; i < boardSize; i++) {
-            for (j = 0; j < boardSize; j++) {
-                if(board[i][j]!=null)
-                {
-                    tracking[i+1][j+1] = ' ';
-                }
-                else
-                {
-                    tracking[i+1][j+1] = 'X';
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                tracking[i+1][j+1] = ' ';
+                if(!(board[i][j] instanceof BattleShip)){
+                    tracking[i+1][j+1] = board[i][j].getItemChar();
                 }
             }
         }
@@ -110,20 +108,27 @@ public class Player {
 
         char[][] newBoard = new char[boardSize + 1][boardSize + 1];
         char currentNumber = '1', currentLetter = 'A';
-        int i, j;
 
         newBoard[0][0] = ' ';
 
-        for (i = 1; i < boardSize + 1; i++) {
+        for (int i = 1; i < boardSize + 1; i++) {
             newBoard[0][i] = currentLetter;
             currentLetter+=1;
         }
 
-        for (i = 1; i < boardSize + 1; i++) {
+        for (int i = 1; i < boardSize + 1; i++) {
             newBoard[i][0] = currentNumber;
             currentNumber+=1;
         }
 
         return newBoard;
+    }
+
+    public void ShipDrowned() {
+        this.remainingShips--;
+    }
+
+    public boolean IsPlayerDestroyed(){
+        return this.remainingShips == 0;
     }
 }
