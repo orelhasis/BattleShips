@@ -16,7 +16,7 @@ public class GameManager {
     private GameStatus status;
     private Player currentPlayer;
     private Player winnerPlayer;
-
+    private int boardSize;
     /* -------------- Getters and setters -------------- */
 
     public Player getWinnerPlayer() {
@@ -59,22 +59,29 @@ public class GameManager {
         this.currentPlayer=currentPlayer;
     }
 
-
+    public int getBoarSize(){
+        return this.boardSize;
+    }
      /* -------------- Function members -------------- */
 
-    public GameManager(BattleShipGame gameSettings) {
+    public GameManager() {
+            status = GameStatus.INIT;
+    }
 
+    public boolean LoadGame(BattleShipGame gameSettings){
+        //TODO: ADD LOADING VERIFICATION LOGIC
+        Boolean isLoadedSuccessfully = true;
         if (GameType.BASIC == GameType.valueOf(gameSettings.getGameType())) {
             type = GameType.BASIC;
-            status = GameStatus.RUN;
             loadBasicGame(gameSettings);
-            currentPlayer = players[0];
-            winnerPlayer=null;
         }
+        currentPlayer = players[0];
+        winnerPlayer = null;
+        return isLoadedSuccessfully;
     }
 
     private void loadBasicGame(BattleShipGame gameSettings) {
-
+        this.boardSize =  gameSettings.getBoardSize();
         initializePlayer(gameSettings, PlayerName.PLAYER_1);
         initializePlayer(gameSettings, PlayerName.PLAYER_2);
     }
