@@ -1,13 +1,13 @@
 package BattleShipsLogic.GameObjects;
 
 import BattleShipsLogic.Definitions.*;
-import BattleShipsLogic.GameSettings.BattleShipGame.ShipTypes;
 import BattleShipsLogic.GameSettings.BattleShipGame;
 import BattleShipsLogic.GameSettings.BattleShipGame.Boards.Board;
+import BattleShipsLogic.GameSettings.BattleShipGame.ShipTypes;
 
 import java.util.List;
 
-public class GameManager {
+public class GameManager extends java.util.Observable{
 
     /* -------------- Data members -------------- */
 
@@ -164,8 +164,8 @@ public class GameManager {
         }
     }
 
-    public void makeMove(Point attackedPoint) {
-
+    public MoveResults makeMove(Point attackedPoint) {
+        MoveResults result = MoveResults.Miss;
         Player attackedPlayer;
         if(currentPlayer == players[0])
         {
@@ -178,15 +178,20 @@ public class GameManager {
 
         // Get attacked item in the attacked player grid.
         SeaItem attackedItem = attackedPlayer.getBoard()[attackedPoint.getX()][attackedPoint.getY()];
-
-        if(attackedItem instanceof WaterItem)
+        if(attackedItem  == null){
+            result = MoveResults.Used;
+            //notifyObservers(new );
+        }
+        else if(attackedItem instanceof WaterItem)
         {
+            result = MoveResults.Miss;
             // Clear item in the attacked player board.
-            attackedPlayer.getBoard()[attackedPoint.getX()][attackedPoint.getY()]=null;
+            attackedPlayer.getBoard()[attackedPoint.getX()][attackedPoint.getY()] = null;
             currentPlayer = attackedPlayer;
         }
         else if (attackedItem instanceof BattleShip)
         {
+            result = MoveResults.Hit;
             // In case of battle ship hit - increase score.
             attackedPlayer.getBoard()[attackedPoint.getX()][attackedPoint.getY()]=null;
             currentPlayer.setScore(currentPlayer.getScore()+1);
@@ -196,13 +201,13 @@ public class GameManager {
                 winnerPlayer = currentPlayer;
                 status = GameStatus.OVER;
             }
-
         }
         else
         {
             // Point that was already attacked is attacked again.
             currentPlayer = attackedPlayer;
         }
+        return result;
     }
 
     private boolean checkWinner(Player currentPlayer, Player attackedPlayer) {
@@ -220,5 +225,4 @@ public class GameManager {
         }
         return isWinner;
     }
-
 }
