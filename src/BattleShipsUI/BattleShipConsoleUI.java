@@ -132,6 +132,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
                 }
                 theGame.setStatus(GameStatus.RUN);
                 printGameStartsMessage();
+                super.showBoards(theGame.getCurrentPlayer());
                 break;
             case GET_GAME_STATUS:
                 System.out.println(theGame.getCurrentPlayer().getName().toString() + " it's your turn.");
@@ -160,7 +161,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
     private Point getAttackedPoint() {
         Point resPoint = new Point(0,0);
         Scanner in = new Scanner(System.in);
-        System.out.print("Insert Point  To attach (i.e B5):");
+        System.out.print("Insert Point To attack (i.e B5):");
         String playerInput = in.nextLine();
         if(playerInput.length() != 2){
             resPoint.setX(-1);

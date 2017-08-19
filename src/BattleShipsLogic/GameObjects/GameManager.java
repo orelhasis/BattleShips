@@ -193,7 +193,7 @@ public class GameManager extends java.util.Observable{
                 result = MoveResults.Drowned;
                 attackedPlayer.ShipDrowned();
             }
-            currentPlayer.AddScore(attackedItem.GetScore());
+            currentPlayer.AddScore(1);
             if(attackedPlayer.IsPlayerDestroyed()) {
                 winnerPlayer = currentPlayer;
                 status = GameStatus.OVER;
