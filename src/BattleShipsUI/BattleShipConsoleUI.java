@@ -135,11 +135,11 @@ public class BattleShipConsoleUI extends BattleShipUI {
                 break;
             case GET_GAME_STATUS:
                 System.out.println(theGame.getCurrentPlayer().getName().toString() + " it's your turn.");
-                showBoards(theGame.getCurrentPlayer(), theGame);
+                showBoards(theGame.getCurrentPlayer());
                 System.out.println("Current score: " + theGame.getCurrentPlayer().getScore() + ".");
                 break;
             case MAKE_A_MOVE:
-                makeMove();
+                showMoveResults(makeMove());
                 if(theGame.getStatus() == GameStatus.OVER) {
                     publishWinnerResults();
                 }
@@ -184,6 +184,14 @@ public class BattleShipConsoleUI extends BattleShipUI {
         showBoard(playerPrimaryGrid);
     }
 
+    protected MoveResults makeMove() {
+        Point attackedPoint;
+        do{
+            attackedPoint = getAttackedPoint();
+        }while(!isLegalPoint(attackedPoint));
+        return attackAPoint(attackedPoint);
+    }
+
     @Override
     protected void showTrackingGrid(Player player) {
         System.out.println("Tracking grid of " + player.getName().toString());
@@ -197,16 +205,60 @@ public class BattleShipConsoleUI extends BattleShipUI {
                 System.out.print(" "+board[i][j]+" |");
                 if(j == board.length-1) {
                     System.out.println(" ");
+                    System.out.println("   ---------------------");
                 }
             }
         }
     }
 
-    protected MoveResults makeMove() {
-        Point attackedPoint;
-        do{
-            attackedPoint = getAttackedPoint();
-        }while(!isLegalPoint(attackedPoint));
-        return attackAPoint(attackedPoint);
+    @Override
+    protected void showBoards(char[][] board,char[][] trackingboard) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                System.out.print(" "+board[i][j]+" |");
+                if(j == board.length-1) {
+                    System.out.print(" ");
+                }
+            }
+            System.out.print("   ");
+            for (int j = 0; j < trackingboard.length; j++) {
+                System.out.print(" "+trackingboard[i][j]+" |");
+                if(j == trackingboard.length-1) {
+                    System.out.println(" ");
+                }
+            }
+            System.out.println("   ---------------------       ---------------------");
+        }
     }
+
+    @Override
+    protected void showUsedMessage() {
+        System.out.println("Bad Luck " + theGame.getCurrentPlayer().getName().toString() + " this choice is used");
+    }
+
+    @Override
+    protected void showDrownedMessage() {
+        System.out.println("YES!!! " + theGame.getCurrentPlayer().getName().toString() + " has drowned a ship!");
+    }
+
+    @Override
+    protected void showHitAMineMessage() {
+        System.out.println("Oh shoot!!! " +  theGame.getCurrentPlayer().getName().toString() + " has hit a Mine");
+    }
+
+    @Override
+    protected void showMissMessage() {
+        System.out.println(theGame.getCurrentPlayer().getName().toString() + " has missed");
+    }
+
+    @Override
+    protected void showHitMessage() {
+        System.out.println(theGame.getCurrentPlayer().getName().toString() + " Hit a battleship");
+    }
+    @Override
+    protected void showBoardsTitles(String attacker, String defender) {
+        System.out.print("Primary grid of " + attacker + ":");
+        System.out.println("     Tracking grid for " + defender + ":");
+    }
+
 }

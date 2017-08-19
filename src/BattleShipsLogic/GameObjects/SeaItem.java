@@ -8,6 +8,8 @@ public abstract class SeaItem {
 
     private char itemChar;
 
+    protected boolean gotHit;
+
     /* -------------- Getters and setters -------------- */
     SeaItem(int x, int y) {
         this.position = new Point(x,y);
@@ -27,5 +29,17 @@ public abstract class SeaItem {
 
     public void setItemChar(char itemChar) {
         this.itemChar = itemChar;
+    }
+
+    public void GotHit(){
+        gotHit = true;
+    }
+
+    public boolean IsDestroyed(){
+        return gotHit;
+    }
+
+    public int GetScore(){
+        return 0;
     }
 }

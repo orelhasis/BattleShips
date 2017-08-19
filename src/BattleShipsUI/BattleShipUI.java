@@ -1,6 +1,5 @@
 package BattleShipsUI;
 
-import BattleShipsLogic.Definitions.GameStatus;
 import BattleShipsLogic.Definitions.MoveResults;
 import BattleShipsLogic.GameObjects.GameManager;
 import BattleShipsLogic.GameObjects.Player;
@@ -55,8 +54,8 @@ public abstract class BattleShipUI implements Observer{
         return isLoadedSuccessfully;
     }
 
-    protected Boolean isLegalChoice(int choice){
-        Boolean isLegalInput= false;
+    protected boolean isLegalChoice(int choice){
+        boolean isLegalInput= false;
         switch(theGame.getStatus()){
             case INIT:
                 isLegalInput = choice == LOAD_GAME || choice == EXIT_GAME;
@@ -74,20 +73,20 @@ public abstract class BattleShipUI implements Observer{
         return isLegalInput;
     }
 
-    protected Boolean isLegalPoint(Point p){
+    protected boolean isLegalPoint(Point p){
         return p.getX() >= 0 && p.getX() <  theGame.getBoarSize() && p.getY()>=0 && p.getY() < theGame.getBoarSize();
     }
 
-    protected void showBoards(Player player, GameManager battleShipGame) {
+    protected void showBoards(Player player) {
+        Player otherPlayer = theGame.getPlayers()[0];
+        if(theGame.getPlayers()[0] == player) {
+            otherPlayer = theGame.getPlayers()[1];
+        }
+        showBoardsTitles(player.getName().toString(), otherPlayer.getName().toString());
+        showBoards(player.getPlayerPrimaryGrid(),otherPlayer.getPlayerTrackingGrid());
+    }
 
-        if(battleShipGame.getPlayers()[0] == player) {
-            showPrimaryGrid(battleShipGame.getPlayers()[0]);
-            showTrackingGrid(battleShipGame.getPlayers()[1]);
-        }
-        else {
-            showPrimaryGrid(battleShipGame.getPlayers()[1]);
-            showTrackingGrid(battleShipGame.getPlayers()[0]);
-        }
+    protected void showBoardsTitles(String attacker, String defender) {
     }
 
     protected MoveResults attackAPoint(Point pointToAttack) {
@@ -99,4 +98,45 @@ public abstract class BattleShipUI implements Observer{
     protected abstract void showTrackingGrid(Player player);
 
     protected abstract void showBoard(char[][] board);
+
+    protected void showMoveResults(MoveResults moveResults){
+        switch (moveResults){
+            case Hit:
+                showHitMessage();
+                break;
+            case Miss:
+                showMissMessage();
+                swapPlayers();
+                break;
+            case Drowned:
+                showDrownedMessage();
+                break;
+            case Used:
+                showUsedMessage();
+                break;
+            case Mine:
+                showHitAMineMessage();
+        }
+    }
+
+    protected void swapPlayers() {
+        if(theGame.getCurrentPlayer() == theGame.getPlayers()[0]){
+            theGame.setCurrentPlayer(theGame.getPlayers()[1]);
+        }
+        else{
+            theGame.setCurrentPlayer(theGame.getPlayers()[0]);
+        }
+    }
+
+    protected abstract void showBoards(char[][] board, char[][] trackingboard);
+
+    protected abstract void showUsedMessage();
+
+    protected abstract void showDrownedMessage();
+
+    protected abstract void showHitAMineMessage();
+
+    protected abstract void showMissMessage();
+
+    protected abstract void showHitMessage();
 }

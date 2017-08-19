@@ -4,15 +4,14 @@ import BattleShipsLogic.Definitions.ShipDirection;
 import BattleShipsLogic.Definitions.ShipType;
 
 public class BattleShip extends SeaItem {
-
     /* -------------- Data members -------------- */
-
     private ShipDirection direction;
     private ShipType type;
-    private int length;
+    private final int length;
+    private int remainingPartsCount;
+    private int score;
 
     /* -------------- Getters and setters -------------- */
-
     public ShipDirection getDirection() {
         return direction;
     }
@@ -33,26 +32,33 @@ public class BattleShip extends SeaItem {
         return length;
     }
 
-    public void setLength(int length) {
-        this.length = length;
-    }
-
     /* -------------- Function members -------------- */
 
-    public BattleShip(ShipDirection direction, ShipType type, int length, int x, int y) {
+    public BattleShip(ShipDirection direction, ShipType type, int length, int score, int x, int y) {
         super(x,y);
-        this.direction=direction;
-        this.type=type;
-        this.length=length;
-
-        if(type == ShipType.shipTypeA)
-        {
+        this.score = score;
+        this.direction = direction;
+        this.type = type;
+        this.length = this.remainingPartsCount = length;
+        setItemChar('B');
+        if(type == ShipType.shipTypeA) {
             setItemChar('A');
-        }
-        else
-        {
-            setItemChar('B');
         }
     }
 
+    @Override
+    public void GotHit() {
+        this.remainingPartsCount--;
+    }
+
+    @Override
+    public boolean IsDestroyed() {
+         return remainingPartsCount == 0;
+    }
+
+    @Override
+    public int GetScore(){
+        return score;
+    }
 }
+
