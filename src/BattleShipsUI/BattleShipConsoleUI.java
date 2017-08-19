@@ -32,13 +32,19 @@ public class BattleShipConsoleUI extends BattleShipUI {
     protected void publishWinnerResults() {
         System.out.println("Congratulations " + theGame.getWinnerPlayer().getName().toString() + ", you are the winner!");
         System.out.println("Results:");
-        System.out.println(theGame.getPlayers()[0].getName().toString() + ": " + theGame.getPlayers()[0].getScore());
-        System.out.println(theGame.getPlayers()[1].getName().toString() + ": " + theGame.getPlayers()[1].getScore());
+        System.out.println(theGame.getPlayers()[0].getName().toString() + ": " + theGame.getPlayers()[0].getStatistics().getNumberOfHits());
+        System.out.println(theGame.getPlayers()[1].getName().toString() + ": " + theGame.getPlayers()[1].getStatistics().getNumberOfHits());
     }
 
     @Override
     protected void printStatistics() {
-        System.out.println("All Kind of statistics to be printed here");
+        System.out.println("Game statistics:");
+        System.out.println("Total number of turns: " + Integer.valueOf(theGame.getPlayers()[0].getStatistics().getNumberOfTurns() + Integer.valueOf(theGame.getPlayers()[1].getStatistics().getNumberOfTurns())));
+        System.out.println("Time elapsed: " + calcTime((int) ((System.nanoTime()/NANO_SECONDS_IN_SECOND)-theGame.getStartTime())));
+        System.out.println("Number of hits: " + theGame.getPlayers()[0].getName() + " - " + theGame.getPlayers()[0].getStatistics().getNumberOfHits() + ", " + theGame.getPlayers()[1].getName() + " - " + theGame.getPlayers()[1].getStatistics().getNumberOfHits() + ".");
+        System.out.println("Number of missings: " + theGame.getPlayers()[0].getName() + " - " + theGame.getPlayers()[0].getStatistics().getNumberOfMissing() + ", " + theGame.getPlayers()[1].getName() + " - " + theGame.getPlayers()[1].getStatistics().getNumberOfMissing() + ".");
+        System.out.println("Average time for attack: " + theGame.getPlayers()[0].getName() + " - " + calcTime(theGame.getPlayers()[0].getStatistics().getAverageTimeForTurn()) + ", " + theGame.getPlayers()[1].getName() + " - " + calcTime(theGame.getPlayers()[1].getStatistics().getAverageTimeForTurn()) + ".");
+
     }
 
     @Override
@@ -115,6 +121,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
         }
         System.out.print("Your choice: ");
     }
+
     private void handleUserInput(int choice){
         switch(choice) {
             case LOAD_GAME:
@@ -131,12 +138,13 @@ public class BattleShipConsoleUI extends BattleShipUI {
                     loadGame();
                 }
                 theGame.setStatus(GameStatus.RUN);
+                theGame.setStartTime((int)(System.nanoTime()/NANO_SECONDS_IN_SECOND));
                 printGameStartsMessage();
                 break;
             case GET_GAME_STATUS:
                 System.out.println(theGame.getCurrentPlayer().getName().toString() + " it's your turn.");
                 showBoards(theGame.getCurrentPlayer(), theGame);
-                System.out.println("Current score: " + theGame.getCurrentPlayer().getScore() + ".");
+                System.out.println("Current score: " + theGame.getCurrentPlayer().getStatistics().getNumberOfHits() + ".");
                 break;
             case MAKE_A_MOVE:
                 makeMove();
@@ -204,9 +212,30 @@ public class BattleShipConsoleUI extends BattleShipUI {
 
     protected MoveResults makeMove() {
         Point attackedPoint;
+        long startMoveTime = System.nanoTime(); // Taking time in nano of the moment 'make move' option was selected.
+
         do{
             attackedPoint = getAttackedPoint();
         }while(!isLegalPoint(attackedPoint));
-        return attackAPoint(attackedPoint);
+
+        int moveTime = (int) ((System.nanoTime() - startMoveTime)/NANO_SECONDS_IN_SECOND); // Calculate time for a move in seconds.
+        return attackAPoint(attackedPoint, moveTime);
+    }
+
+    // Get number of seconds and convert to format of - MM:SS.
+    private String calcTime(int numberOfSeconds) {
+
+        String secondsStr = (Integer.toString(numberOfSeconds%60));
+        String minutesStr = (Integer.toString(numberOfSeconds/60));
+
+        if(secondsStr.length()==1){
+            secondsStr = '0' + secondsStr;
+        }
+
+        if(minutesStr.length()==1){
+            minutesStr = '0' + minutesStr;
+        }
+
+        return minutesStr + ":" + secondsStr;
     }
 }

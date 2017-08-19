@@ -17,6 +17,8 @@ public class GameManager extends java.util.Observable{
     private Player currentPlayer;
     private Player winnerPlayer;
     private int boardSize;
+    private int startTimeInSeconds;
+
     /* -------------- Getters and setters -------------- */
 
     public Player getWinnerPlayer() {
@@ -62,9 +64,19 @@ public class GameManager extends java.util.Observable{
     public int getBoarSize(){
         return this.boardSize;
     }
-     /* -------------- Function members -------------- */
+
+    public int getStartTime() {
+        return startTimeInSeconds;
+    }
+
+    public void setStartTime(int startTimeInSeconds) {
+        this.startTimeInSeconds = startTimeInSeconds;
+    }
+
+    /* -------------- Function members -------------- */
 
     public GameManager() {
+
             status = GameStatus.INIT;
     }
 
@@ -118,12 +130,12 @@ public class GameManager extends java.util.Observable{
 
             ShipDirection direction = ShipDirection.valueOf(ship.get(i).getDirection()); // Get battle ship direction.
             BattleShipsLogic.Definitions.ShipType shipType = BattleShipsLogic.Definitions.ShipType.valueOf(ship.get(i).getShipTypeId()); // Get battle ship type.
-            int score = getShipLength(ship.get(i), shipTypes); // Get ship length by type.
+            int length = getShipLength(ship.get(i), shipTypes); // Get ship length by type.
             int positionX = ship.get(i).getPosition().getX(); // Get x position.
             int positionY = ship.get(i).getPosition().getY(); // Get y position.
 
             // Create new battle ship.
-            BattleShip playerShip = new BattleShip(direction, shipType, score, positionX, positionY);
+            BattleShip playerShip = new BattleShip(direction, shipType, length, positionX, positionY);
 
             // Set batttle ship to user board.
             setBattleShipToUserBoard(player, playerShip);
@@ -164,9 +176,17 @@ public class GameManager extends java.util.Observable{
         }
     }
 
-    public MoveResults makeMove(Point attackedPoint) {
+    public MoveResults makeMove(Point attackedPoint, int moveTime) {
         MoveResults result = MoveResults.Miss;
         Player attackedPlayer;
+
+        // Update current player statistics.
+        int numberOfTurns = currentPlayer.getStatistics().getNumberOfTurns();
+        int averageTimeOfTurn = currentPlayer.getStatistics().getAverageTimeForTurn();
+        int newAverage = ((numberOfTurns*averageTimeOfTurn)+moveTime)/(numberOfTurns+1);
+        currentPlayer.getStatistics().setAverageTimeForTurn(newAverage);
+        currentPlayer.getStatistics().setNumberOfTurns(numberOfTurns+1);
+
         if(currentPlayer == players[0])
         {
             attackedPlayer = players[1];
@@ -187,6 +207,7 @@ public class GameManager extends java.util.Observable{
             result = MoveResults.Miss;
             // Clear item in the attacked player board.
             attackedPlayer.getBoard()[attackedPoint.getX()][attackedPoint.getY()] = null;
+            currentPlayer.getStatistics().setNumberOfMissings(currentPlayer.getStatistics().getNumberOfMissing()+1);
             currentPlayer = attackedPlayer;
         }
         else if (attackedItem instanceof BattleShip)
@@ -194,7 +215,7 @@ public class GameManager extends java.util.Observable{
             result = MoveResults.Hit;
             // In case of battle ship hit - increase score.
             attackedPlayer.getBoard()[attackedPoint.getX()][attackedPoint.getY()]=null;
-            currentPlayer.setScore(currentPlayer.getScore()+1);
+            currentPlayer.getStatistics().setNumberOfHits(currentPlayer.getStatistics().getNumberOfHits()+1);
             boolean isWinner = checkWinner(currentPlayer, attackedPlayer);
             if(isWinner)
             {
@@ -205,8 +226,8 @@ public class GameManager extends java.util.Observable{
         else
         {
             // Point that was already attacked is attacked again.
-            currentPlayer = attackedPlayer;
         }
+
         return result;
     }
 

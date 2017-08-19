@@ -1,6 +1,5 @@
 package BattleShipsUI;
 
-import BattleShipsLogic.Definitions.GameStatus;
 import BattleShipsLogic.Definitions.MoveResults;
 import BattleShipsLogic.GameObjects.GameManager;
 import BattleShipsLogic.GameObjects.Player;
@@ -22,6 +21,8 @@ public abstract class BattleShipUI implements Observer{
     static final int GET_STATISTICS = 5;
     static final int QUIT = 6;
     static final int EXIT_GAME = 7;
+    static final int NANO_SECONDS_IN_SECOND = 1000000000;
+
     protected GameManager theGame;
 
 
@@ -90,8 +91,8 @@ public abstract class BattleShipUI implements Observer{
         }
     }
 
-    protected MoveResults attackAPoint(Point pointToAttack) {
-        return theGame.makeMove(pointToAttack);
+    protected MoveResults attackAPoint(Point pointToAttack, int moveTime) {
+        return theGame.makeMove(pointToAttack, moveTime);
     }
 
     protected abstract void showPrimaryGrid(Player player);

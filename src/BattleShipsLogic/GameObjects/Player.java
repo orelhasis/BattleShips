@@ -7,8 +7,8 @@ public class Player {
     /* -------------- Data members -------------- */
     private PlayerName name;
     private int boardSize;
-    private int score;
     private SeaItem[][] board;
+    private PlayerStatistics statistics = new PlayerStatistics();
 
     /* -------------- Getters and setters -------------- */
 
@@ -28,14 +28,6 @@ public class Player {
         this.boardSize = boardSize;
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public SeaItem[][] getBoard() {
         return board;
     }
@@ -44,13 +36,19 @@ public class Player {
         this.board = board;
     }
 
+    public PlayerStatistics getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(PlayerStatistics statistics) {
+        this.statistics = statistics;
+    }
 
     /* -------------- Function members -------------- */
     public Player(PlayerName name, int boardSize) {
 
         this.name = name;
         this.boardSize = boardSize;
-        this.score = 0;
         setEmptyGrid();
     }
 
