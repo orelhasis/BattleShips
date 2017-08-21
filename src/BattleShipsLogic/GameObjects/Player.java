@@ -7,10 +7,12 @@ public class Player {
     /* -------------- Data members -------------- */
     private PlayerName name;
     private int boardSize;
-    private int score;
     private SeaItem[][] board;
     private final int numOfShips;
     private int remainingShips;
+    private int score;
+    private PlayerStatistics statistics = new PlayerStatistics();
+
     /* -------------- Getters and setters -------------- */
 
     public PlayerName getName() {
@@ -49,13 +51,19 @@ public class Player {
         this.board = board;
     }
 
+    public PlayerStatistics getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(PlayerStatistics statistics) {
+        this.statistics = statistics;
+    }
 
     /* -------------- Function members -------------- */
     public Player(PlayerName name, int boardSize, int numOfShips) {
         this.numOfShips = this.remainingShips = numOfShips;
         this.name = name;
         this.boardSize = boardSize;
-        this.score = 0;
         setEmptyGrid();
     }
 

@@ -38,7 +38,13 @@ public class BattleShipConsoleUI extends BattleShipUI {
 
     @Override
     protected void printStatistics() {
-        System.out.println("All Kind of statistics to be printed here");
+        System.out.println("Game statistics:");
+        System.out.println("Total number of turns: " + Integer.valueOf(theGame.getPlayers()[0].getStatistics().getNumberOfTurns() + Integer.valueOf(theGame.getPlayers()[1].getStatistics().getNumberOfTurns())));
+        System.out.println("Time elapsed: " + calcTime((int) ((System.nanoTime()/NANO_SECONDS_IN_SECOND) - theGame.getStartTime())));
+        System.out.println("Number of hits: " + theGame.getPlayers()[0].getName() + " - " + theGame.getPlayers()[0].getStatistics().getNumberOfHits() + ", " + theGame.getPlayers()[1].getName() + " - " + theGame.getPlayers()[1].getStatistics().getNumberOfHits() + ".");
+        System.out.println("Number of missings: " + theGame.getPlayers()[0].getName() + " - " + theGame.getPlayers()[0].getStatistics().getNumberOfMissing() + ", " + theGame.getPlayers()[1].getName() + " - " + theGame.getPlayers()[1].getStatistics().getNumberOfMissing() + ".");
+        System.out.println("Average time for attack: " + theGame.getPlayers()[0].getName() + " - " + calcTime(theGame.getPlayers()[0].getStatistics().getAverageTimeForTurn()) + ", " + theGame.getPlayers()[1].getName() + " - " + calcTime(theGame.getPlayers()[1].getStatistics().getAverageTimeForTurn()) + ".");
+
     }
 
     @Override
@@ -132,7 +138,6 @@ public class BattleShipConsoleUI extends BattleShipUI {
                 }
                 theGame.setStatus(GameStatus.RUN);
                 printGameStartsMessage();
-                super.showBoards(theGame.getCurrentPlayer());
                 break;
             case GET_GAME_STATUS:
                 System.out.println(theGame.getCurrentPlayer().getName().toString() + " it's your turn.");
@@ -140,7 +145,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
                 System.out.println("Current score: " + theGame.getCurrentPlayer().getScore() + ".");
                 break;
             case MAKE_A_MOVE:
-                showMoveResults(makeMove());
+                makeMove();
                 if(theGame.getStatus() == GameStatus.OVER) {
                     publishWinnerResults();
                 }
@@ -161,7 +166,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
     private Point getAttackedPoint() {
         Point resPoint = new Point(0,0);
         Scanner in = new Scanner(System.in);
-        System.out.print("Insert Point To attack (i.e B5):");
+        System.out.print("Insert Point  To attach (i.e B5):");
         String playerInput = in.nextLine();
         if(playerInput.length() != 2){
             resPoint.setX(-1);
@@ -185,14 +190,6 @@ public class BattleShipConsoleUI extends BattleShipUI {
         showBoard(playerPrimaryGrid);
     }
 
-    protected MoveResults makeMove() {
-        Point attackedPoint;
-        do{
-            attackedPoint = getAttackedPoint();
-        }while(!isLegalPoint(attackedPoint));
-        return attackAPoint(attackedPoint);
-    }
-
     @Override
     protected void showTrackingGrid(Player player) {
         System.out.println("Tracking grid of " + player.getName().toString());
@@ -206,30 +203,19 @@ public class BattleShipConsoleUI extends BattleShipUI {
                 System.out.print(" "+board[i][j]+" |");
                 if(j == board.length-1) {
                     System.out.println(" ");
-                    System.out.println("   ---------------------");
                 }
             }
         }
     }
 
-    @Override
-    protected void showBoards(char[][] board,char[][] trackingboard) {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                System.out.print(" "+board[i][j]+" |");
-                if(j == board.length-1) {
-                    System.out.print(" ");
-                }
-            }
-            System.out.print("   ");
-            for (int j = 0; j < trackingboard.length; j++) {
-                System.out.print(" "+trackingboard[i][j]+" |");
-                if(j == trackingboard.length-1) {
-                    System.out.println(" ");
-                }
-            }
-            System.out.println("   ---------------------       ---------------------");
-        }
+    protected MoveResults makeMove() {
+        Point attackedPoint;
+        long startMoveTime = System.nanoTime(); // Taking time in nano of the moment 'make move' option was selected.
+        do{
+            attackedPoint = getAttackedPoint();
+        }while(!isLegalPoint(attackedPoint));
+        int moveTime = (int) ((System.nanoTime() - startMoveTime)/NANO_SECONDS_IN_SECOND); // Calculate time for a move in seconds.
+        return attackAPoint(attackedPoint, moveTime);
     }
 
     @Override
@@ -260,6 +246,26 @@ public class BattleShipConsoleUI extends BattleShipUI {
     protected void showBoardsTitles(String attacker, String defender) {
         System.out.print("Primary grid of " + attacker + ":");
         System.out.println("     Tracking grid for " + defender + ":");
+    }
+
+    @Override
+    protected void showBoards(char[][] board,char[][] trackingboard) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                System.out.print(" "+board[i][j]+" |");
+                if(j == board.length-1) {
+                    System.out.print(" ");
+                }
+            }
+            System.out.print("   ");
+            for (int j = 0; j < trackingboard.length; j++) {
+                System.out.print(" "+trackingboard[i][j]+" |");
+                if(j == trackingboard.length-1) {
+                    System.out.println(" ");
+                }
+            }
+            System.out.println("   ---------------------       ---------------------");
+        }
     }
 
 }

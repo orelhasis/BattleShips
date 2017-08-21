@@ -17,6 +17,8 @@ public class GameManager extends java.util.Observable{
     private Player currentPlayer;
     private Player winnerPlayer;
     private int boardSize;
+    private int startTimeInSeconds;
+
     /* -------------- Getters and setters -------------- */
 
     public Player getWinnerPlayer() {
@@ -62,9 +64,19 @@ public class GameManager extends java.util.Observable{
     public int getBoarSize(){
         return this.boardSize;
     }
-     /* -------------- Function members -------------- */
+
+    public int getStartTime() {
+        return startTimeInSeconds;
+    }
+
+    public void setStartTime(int startTimeInSeconds) {
+        this.startTimeInSeconds = startTimeInSeconds;
+    }
+
+    /* -------------- Function members -------------- */
 
     public GameManager() {
+
             status = GameStatus.INIT;
     }
 
@@ -118,11 +130,9 @@ public class GameManager extends java.util.Observable{
             int score = getShipScore(ship.get(i), shipTypes); // Get ship length by type.
             int positionX = ship.get(i).getPosition().getX(); // Get x position.
             int positionY = ship.get(i).getPosition().getY(); // Get y position.
-
             // Create new battle ship.
             BattleShip playerShip = new BattleShip(direction, shipType,length , score, positionX, positionY);
-
-            // Set batttle ship to user board.
+            // Set battle ship to user board.
             setBattleShipToUserBoard(player, playerShip);
         }
     }
@@ -165,13 +175,22 @@ public class GameManager extends java.util.Observable{
         }
     }
 
-    public MoveResults makeMove(Point attackedPoint) {
+    private void updateStatistics(int moveTime){
+        int numberOfTurns = currentPlayer.getStatistics().getNumberOfTurns();
+        int averageTimeOfTurn = currentPlayer.getStatistics().getAverageTimeForTurn();
+        int newAverage = ((numberOfTurns*averageTimeOfTurn)+moveTime)/(numberOfTurns+1);
+        currentPlayer.getStatistics().setAverageTimeForTurn(newAverage);
+        currentPlayer.getStatistics().setNumberOfTurns(numberOfTurns+1);
+    }
+
+    public MoveResults makeMove(Point attackedPoint, int moveTime) {
         MoveResults result = MoveResults.Miss;
         Player attackedPlayer = players[0];
-        if(currentPlayer == players[0]){
+        if(currentPlayer == players[0]) {
             attackedPlayer = players[1];
         }
-
+        // Update current player statistics.
+        updateStatistics(moveTime);
         // Get attacked item in the attacked player grid.
         SeaItem attackedItem = attackedPlayer.getBoard()[attackedPoint.getX()][attackedPoint.getY()];
         int x = attackedPoint.getX();
@@ -183,17 +202,21 @@ public class GameManager extends java.util.Observable{
         {
             result = MoveResults.Miss;
             attackedItem.GotHit();
+            currentPlayer.getStatistics().AddMiss();
+            currentPlayer = attackedPlayer;
         }
         else if (attackedItem instanceof BattleShip)
         {
             result = MoveResults.Hit;
             attackedItem.GotHit();
             attackedPlayer.getBoard()[x][y] = new ShipRemains(x, y);
+            // In case of battle ship hit - increase score.
+            currentPlayer.AddScore(1);
+            currentPlayer.getStatistics().AddHit();
             if(attackedItem.IsDestroyed()){
                 result = MoveResults.Drowned;
                 attackedPlayer.ShipDrowned();
             }
-            currentPlayer.AddScore(1);
             if(attackedPlayer.IsPlayerDestroyed()) {
                 winnerPlayer = currentPlayer;
                 status = GameStatus.OVER;

@@ -21,6 +21,8 @@ public abstract class BattleShipUI implements Observer{
     static final int GET_STATISTICS = 5;
     static final int QUIT = 6;
     static final int EXIT_GAME = 7;
+    static final int NANO_SECONDS_IN_SECOND = 1000000000;
+
     protected GameManager theGame;
 
 
@@ -89,8 +91,8 @@ public abstract class BattleShipUI implements Observer{
     protected void showBoardsTitles(String attacker, String defender) {
     }
 
-    protected MoveResults attackAPoint(Point pointToAttack) {
-        return theGame.makeMove(pointToAttack);
+    protected MoveResults attackAPoint(Point pointToAttack, int moveTime) {
+        return theGame.makeMove(pointToAttack, moveTime);
     }
 
     protected abstract void showPrimaryGrid(Player player);
@@ -139,4 +141,16 @@ public abstract class BattleShipUI implements Observer{
     protected abstract void showMissMessage();
 
     protected abstract void showHitMessage();
+
+    protected String calcTime(int numberOfSeconds) {
+        String secondsStr = (Integer.toString(numberOfSeconds%60));
+        String minutesStr = (Integer.toString(numberOfSeconds/60));
+        if(secondsStr.length()==1){
+            secondsStr = '0' + secondsStr;
+        }
+        if(minutesStr.length()==1){
+            minutesStr = '0' + minutesStr;
+        }
+        return minutesStr + ":" + secondsStr;
+    }
 }
