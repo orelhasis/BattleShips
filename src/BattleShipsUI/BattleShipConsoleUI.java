@@ -137,6 +137,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
                     loadGame();
                 }
                 theGame.setStatus(GameStatus.RUN);
+                theGame.setStartTime((int)(System.nanoTime()/NANO_SECONDS_IN_SECOND));
                 printGameStartsMessage();
                 break;
             case GET_GAME_STATUS:
