@@ -163,14 +163,14 @@ public class GameManager extends java.util.Observable{
         SeaItem[][] board = player.getBoard();
         for(int i = 0 ; i< playerShip.getLength(); i++) {
             // Set item to point to the battle ship.
-            board[position.getX()-1][position.getY()-1] = playerShip;
+            board[position.getY()-1][position.getX()-1] = playerShip;
 
             // Move to next item that should point the battle ship.
             if(playerShip.getDirection() == ShipDirection.ROW) {
-                position.setY(position.getY()+1);
+                position.setX(position.getX()+1);
             }
             else {
-                position.setX(position.getX() + 1);
+                position.setY(position.getY() + 1);
             }
         }
     }
@@ -192,7 +192,7 @@ public class GameManager extends java.util.Observable{
         // Update current player statistics.
         updateStatistics(moveTime);
         // Get attacked item in the attacked player grid.
-        SeaItem attackedItem = attackedPlayer.getBoard()[attackedPoint.getX()][attackedPoint.getY()];
+        SeaItem attackedItem = attackedPlayer.getBoard()[attackedPoint.getY()][attackedPoint.getX()];
         int x = attackedPoint.getX();
         int y = attackedPoint.getY();
         if(attackedItem.IsDestroyed()){
@@ -209,7 +209,7 @@ public class GameManager extends java.util.Observable{
         {
             result = MoveResults.Hit;
             attackedItem.GotHit();
-            attackedPlayer.getBoard()[x][y] = new ShipRemains(x, y);
+            attackedPlayer.getBoard()[y][x] = new ShipRemains(y, x);
             // In case of battle ship hit - increase score.
             currentPlayer.AddScore(1);
             currentPlayer.getStatistics().AddHit();
