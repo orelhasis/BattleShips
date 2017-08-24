@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.Observer;
 
 public abstract class BattleShipUI implements Observer{
-    static final String GAME_SETTINGS_FILE_PATH = "src\\BattleShipsLogic\\GameSettings\\battleShip_5_basic.xml";
+    static final String GAME_SETTINGS_FILE_PATH = "battleShip_5_basic.xml";
     static final int LOAD_GAME = 1;
     static final int START_GAME = 2;
     static final int GET_GAME_STATUS = 3;

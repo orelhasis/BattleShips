@@ -50,7 +50,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
     @Override
     protected void showGameLoadFailedMessage() {
         System.out.println("Failed To Load:");
-        //TODO ADD LOGIC TO PRINT REASON FOR LOADING ERROR
+        System.out.println(theGame.getLoadingError());
     }
 
     @Override

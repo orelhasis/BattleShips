@@ -5,6 +5,7 @@ import BattleShipsLogic.GameSettings.BattleShipGame;
 import BattleShipsLogic.GameSettings.BattleShipGame.Boards.Board;
 import BattleShipsLogic.GameSettings.BattleShipGame.ShipTypes;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class GameManager extends java.util.Observable{
@@ -18,6 +19,8 @@ public class GameManager extends java.util.Observable{
     private Player winnerPlayer;
     private int boardSize;
     private int startTimeInSeconds;
+    private boolean isErrorLoading;
+    private String errorString;
 
     /* -------------- Getters and setters -------------- */
 
@@ -65,6 +68,10 @@ public class GameManager extends java.util.Observable{
         return this.boardSize;
     }
 
+    public String getLoadingError() {
+        return errorString;
+    }
+
     public int getStartTime() {
         return startTimeInSeconds;
     }
@@ -78,18 +85,17 @@ public class GameManager extends java.util.Observable{
     public GameManager() {
 
             status = GameStatus.INIT;
+            errorString = "";
     }
 
     public boolean LoadGame(BattleShipGame gameSettings){
-        //TODO: ADD LOADING VERIFICATION LOGIC
-        Boolean isLoadedSuccessfully = true;
         if (GameType.BASIC == GameType.valueOf(gameSettings.getGameType())) {
             type = GameType.BASIC;
             loadBasicGame(gameSettings);
         }
         currentPlayer = players[0];
         winnerPlayer = null;
-        return isLoadedSuccessfully;
+        return !isErrorLoading;
     }
 
     private void loadBasicGame(BattleShipGame gameSettings) {
@@ -118,25 +124,54 @@ public class GameManager extends java.util.Observable{
         initiatePlayerBattleShips(players[playerIndex], playerBoard, shipTypesList);
     }
 
+    private LinkedHashMap<String, Integer> createShipTypeMap(List<ShipTypes.ShipType> shipTypes){
+        LinkedHashMap<String,Integer> shipTypeMap = new LinkedHashMap<>();
+        for (ShipTypes.ShipType type :shipTypes) {
+            shipTypeMap.put(type.getId(),0);
+        }
+        return shipTypeMap;
+    }
+    // Get player spaceships.
     private void initiatePlayerBattleShips(Player player, Board playerBoard, List<ShipTypes.ShipType> shipTypes) {
-
-        // Get player spaceships.
         List<Board.Ship> ship = playerBoard.getShip();
-
+        BattleShip playerShip;
+        LinkedHashMap<String,Integer> shipCountMap = createShipTypeMap(shipTypes);
+        String currentType;
         for(int i=0; i < ship.size(); i++) {
-            ShipDirection direction = ShipDirection.valueOf(ship.get(i).getDirection()); // Get battle ship direction.
-            BattleShipsLogic.Definitions.ShipType shipType = BattleShipsLogic.Definitions.ShipType.valueOf(ship.get(i).getShipTypeId()); // Get battle ship type.
-            int length = getShipLength(ship.get(i), shipTypes); // Get ship length by type.
-            int score = getShipScore(ship.get(i), shipTypes); // Get ship length by type.
-            int positionX = ship.get(i).getPosition().getX(); // Get x position.
-            int positionY = ship.get(i).getPosition().getY(); // Get y position.
-            // Create new battle ship.
-            BattleShip playerShip = new BattleShip(direction, shipType,length , score, positionX, positionY);
-            // Set battle ship to user board.
-            setBattleShipToUserBoard(player, playerShip);
+            currentType = ship.get(i).getShipTypeId();
+            if(!shipCountMap.containsKey(currentType)){
+                isErrorLoading = true;
+                errorString += currentType + " Ship Type in " + player.getName() + " is not defined as a ship type" + System.getProperty("line.separator");
+            }else {
+                shipCountMap.put(currentType, shipCountMap.get(currentType) + 1);
+                playerShip = createAShip(ship, i, shipTypes);
+                // Set battle ship to user board.
+                setBattleShipToUserBoard(player, playerShip);
+            }
+        }
+        checkShipCount(shipTypes, shipCountMap, player);
+    }
+
+    private void checkShipCount(List<ShipTypes.ShipType> shipTypes, LinkedHashMap<String,Integer> actualShips, Player  player){
+        for (ShipTypes.ShipType type :shipTypes) {
+            if(type.getAmount() != actualShips.get(type.getId())){
+                isErrorLoading = true;
+                errorString += player.getName() + " has " + actualShips.get(type.getId()) +" ships of type " + type.getId() + " instead of "+  type.getAmount() + System.getProperty("line.separator");
+            }
         }
     }
 
+    private BattleShip createAShip(List<Board.Ship> ships, int index, List<ShipTypes.ShipType> shipTypes){
+        ShipDirection direction = ShipDirection.valueOf(ships.get(index).getDirection()); // Get battle ship direction.
+        BattleShipsLogic.Definitions.ShipType shipType = BattleShipsLogic.Definitions.ShipType.valueOf(ships.get(index).getShipTypeId()); // Get battle ship type.
+        int length = getShipLength(ships.get(index), shipTypes); // Get ship length by type.
+        int score = getShipScore(ships.get(index), shipTypes); // Get ship length by type.
+        int positionY = ships.get(index).getPosition().getY(); // Get y position.
+        int positionX = ships.get(index).getPosition().getX(); // Get x position.
+        // Create new battle ship.
+        return new BattleShip(direction, shipType,length , score, positionX, positionY);
+    }
+    
     private int getShipLength(Board.Ship ship, List<ShipTypes.ShipType> shipTypes) {
         for(int i=0; i<shipTypes.size(); i++) {
             if(ShipType.valueOf(ship.getShipTypeId()) == ShipType.valueOf(shipTypes.get(i).getId()))
@@ -162,16 +197,59 @@ public class GameManager extends java.util.Observable{
         Point position = playerShip.getPosition();
         SeaItem[][] board = player.getBoard();
         for(int i = 0 ; i< playerShip.getLength(); i++) {
-            // Set item to point to the battle ship.
-            board[position.getX()-1][position.getY()-1] = playerShip;
+            // Set item to point to the battle ship. - x AND y ARE REPLACED IN ARRAY
+            if(isShipOutOfBounds(position.getY(),position.getX())){
+                isErrorLoading = true;
+                errorString+= "A Ship was placed outside of bounds (" + position.getX() +","+ position.getY() + ") for " + player.getName() + System.getProperty("line.separator");
+            }else {
+                setShipInBoard(position.getY() - 1,position.getX() - 1, playerShip, board, player);
 
-            // Move to next item that should point the battle ship.
-            if(playerShip.getDirection() == ShipDirection.ROW) {
-                position.setY(position.getY()+1);
+                // Move to next item that should point the battle ship.
+                if (playerShip.getDirection() == ShipDirection.ROW) {
+                    position.setX(position.getX() + 1);
+                } else {
+                    position.setY(position.getY() + 1);
+                }
             }
-            else {
-                position.setX(position.getX() + 1);
+        }
+    }
+
+    private boolean isShipOutOfBounds(int x, int y){
+        return x > boardSize || y > boardSize || x <=0 || y <=0;
+    }
+
+    private void setShipInBoard(int x,int y,BattleShip playerShip, SeaItem[][] board, Player player){
+        boolean isPositionOk = board[x][y] instanceof WaterItem;
+        if(x > 0){
+            isPositionOk &= board[x-1][y] instanceof WaterItem || board[x-1][y] == playerShip;
+            if(y>0) {
+                isPositionOk &= board[x - 1][y - 1] instanceof WaterItem || board[x - 1][y - 1] == playerShip;
             }
+            if(y<boardSize-1){
+                isPositionOk &= board[x-1][y+1] instanceof WaterItem || board[x][y+1] == playerShip;
+            }
+        }
+        if(y>0) {
+            isPositionOk &= board[x][y - 1] instanceof WaterItem || board[x][y - 1] == playerShip;
+        }
+        if(x < boardSize-1){
+            isPositionOk &= board[x+1][y] instanceof WaterItem || board[x+1][y] == playerShip;
+            if(y<boardSize-1){
+                isPositionOk &= board[x+1][y+1] instanceof WaterItem || board[x+1][y+1] == playerShip;
+            }
+            if(y>0){
+                isPositionOk &= board[x+1][y-1] instanceof WaterItem || board[x+1][y-1] == playerShip;
+            }
+        }
+        if(y<boardSize-1){
+            isPositionOk &= board[x][y+1] instanceof WaterItem || board[x][y+1] == playerShip;
+        }
+        if (isPositionOk){
+            board[x][y] = playerShip;
+        }
+        else{
+            isErrorLoading = true;
+            errorString += "Ships are overlapping in " + player.getName() + " board at (" + (x+1) + "," + (y+1) +")" + System.getProperty("line.separator");
         }
     }
 
