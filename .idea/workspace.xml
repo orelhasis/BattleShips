@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="943c9287-3987-4e7f-bf24-f6b117ce783c" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/battleShip_5_basic.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BattleShips/BattleShipsLogic/GameObjects/GameManager.class" afterPath="$PROJECT_DIR$/out/production/BattleShips/BattleShipsLogic/GameObjects/GameManager.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BattleShipsLogic/GameObjects/GameManager.java" afterPath="$PROJECT_DIR$/src/BattleShipsLogic/GameObjects/GameManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BattleShipsUI/BattleShipConsoleUI.java" afterPath="$PROJECT_DIR$/src/BattleShipsUI/BattleShipConsoleUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BattleShipsUI/BattleShipUI.java" afterPath="$PROJECT_DIR$/src/BattleShipsUI/BattleShipUI.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -44,8 +42,8 @@
       <file leaf-file-name="GameManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/BattleShipsLogic/GameObjects/GameManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="90" column="27" lean-forward="false" selection-start-line="90" selection-start-column="19" selection-end-line="90" selection-end-column="27" />
+            <state relative-caret-position="548">
+              <caret line="304" column="5" lean-forward="true" selection-start-line="304" selection-start-column="5" selection-end-line="304" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#8016#8017#0" expanded="true" />
@@ -55,24 +53,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BattleShipConsoleUI.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BattleShipConsoleUI.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/BattleShipsUI/BattleShipConsoleUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="143" column="53" lean-forward="false" selection-start-line="143" selection-start-column="38" selection-end-line="143" selection-end-column="53" />
+            <state relative-caret-position="150">
+              <caret line="170" column="34" lean-forward="true" selection-start-line="170" selection-start-column="34" selection-end-line="170" selection-end-column="34" />
               <folding>
-                <marker date="1503563476996" expanded="false" signature="7979:7990" ph=" { " />
-                <marker date="1503563476996" expanded="false" signature="8046:8052" ph=" }" />
+                <marker date="1503564456715" expanded="false" signature="7978:7989" ph=" { " />
+                <marker date="1503564456715" expanded="false" signature="8045:8051" ph=" }" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BattleShipUI.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BattleShipUI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/BattleShipsUI/BattleShipUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="79" column="36" lean-forward="true" selection-start-line="79" selection-start-column="36" selection-end-line="79" selection-end-column="36" />
+            <state relative-caret-position="25">
+              <caret line="53" column="28" lean-forward="false" selection-start-line="53" selection-start-column="28" selection-end-line="53" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -91,10 +89,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>swi</find>
-      <find>switch</find>
-      <find>setStartTime</find>
-      <find>new battleship(</find>
       <find>shipTypesList</find>
       <find>line.</find>
       <find>setBattleShipToUserBoard</find>
@@ -121,6 +115,10 @@
       <find>load game</find>
       <find>loadgame</find>
       <find>GameStatus.INIT</find>
+      <find>attach</find>
+      <find>has</find>
+      <find>makeMove</find>
+      <find>showMove</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -170,8 +168,8 @@
         <option value="$PROJECT_DIR$/src/BattleShipsLogic/GameObjects/WaterItem.java" />
         <option value="$PROJECT_DIR$/src/BattleShipsLogic/GameObjects/PlayerStatistics.java" />
         <option value="$PROJECT_DIR$/src/BattleShipsLogic/GameObjects/Player.java" />
-        <option value="$PROJECT_DIR$/src/BattleShipsUI/BattleShipUI.java" />
         <option value="$PROJECT_DIR$/src/BattleShipsLogic/GameObjects/GameManager.java" />
+        <option value="$PROJECT_DIR$/src/BattleShipsUI/BattleShipUI.java" />
         <option value="$PROJECT_DIR$/src/BattleShipsUI/BattleShipConsoleUI.java" />
       </list>
     </option>
@@ -409,12 +407,12 @@
       <workItem from="1502993435486" duration="2107000" />
       <workItem from="1503044082607" duration="18670000" />
       <workItem from="1503328340495" duration="2250000" />
-      <workItem from="1503467874712" duration="10601000" />
+      <workItem from="1503467874712" duration="11596000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14075000" />
+    <option name="totallyTimeSpent" value="15070000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -440,7 +438,7 @@
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37327677" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.63414633" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -767,8 +765,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/BattleShipsLogic/GameObjects/GameManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="90" column="27" lean-forward="false" selection-start-line="90" selection-start-column="19" selection-end-line="90" selection-end-column="27" />
+        <state relative-caret-position="548">
+          <caret line="304" column="5" lean-forward="true" selection-start-line="304" selection-start-column="5" selection-end-line="304" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#8016#8017#0" expanded="true" />
@@ -777,22 +775,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BattleShipsUI/BattleShipConsoleUI.java">
+    <entry file="file://$PROJECT_DIR$/src/BattleShipsUI/BattleShipUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="143" column="53" lean-forward="false" selection-start-line="143" selection-start-column="38" selection-end-line="143" selection-end-column="53" />
-          <folding>
-            <marker date="1503563476996" expanded="false" signature="7979:7990" ph=" { " />
-            <marker date="1503563476996" expanded="false" signature="8046:8052" ph=" }" />
-          </folding>
+        <state relative-caret-position="25">
+          <caret line="53" column="28" lean-forward="false" selection-start-line="53" selection-start-column="28" selection-end-line="53" selection-end-column="28" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BattleShipsUI/BattleShipUI.java">
+    <entry file="file://$PROJECT_DIR$/src/BattleShipsUI/BattleShipConsoleUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="79" column="36" lean-forward="true" selection-start-line="79" selection-start-column="36" selection-end-line="79" selection-end-column="36" />
-          <folding />
+        <state relative-caret-position="150">
+          <caret line="170" column="34" lean-forward="true" selection-start-line="170" selection-start-column="34" selection-end-line="170" selection-end-column="34" />
+          <folding>
+            <marker date="1503564456715" expanded="false" signature="7978:7989" ph=" { " />
+            <marker date="1503564456715" expanded="false" signature="8045:8051" ph=" }" />
+          </folding>
         </state>
       </provider>
     </entry>

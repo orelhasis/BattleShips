@@ -283,7 +283,6 @@ public class GameManager extends java.util.Observable{
             result = MoveResults.Miss;
             attackedItem.GotHit();
             currentPlayer.getStatistics().AddMiss();
-            currentPlayer = attackedPlayer;
         }
         else if (attackedItem instanceof BattleShip)
         {

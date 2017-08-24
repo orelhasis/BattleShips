@@ -183,7 +183,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
     private Point getAttackedPoint() {
         Point resPoint = new Point(0,0);
         Scanner in = new Scanner(System.in);
-        System.out.print("Insert Point  To attach (i.e B5):");
+        System.out.print("Insert Point To attack (i.e B5):");
         String playerInput = in.nextLine();
         if(playerInput.length() != 2){
             resPoint.setX(-1);
@@ -200,6 +200,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
     protected void showWelcomeMessage() {
         System.out.println("Welcome to the Battle Ships game!");
     }
+
     @Override
     protected void showPrimaryGrid(Player player) {
         char[][] playerPrimaryGrid = player.getPlayerPrimaryGrid();
