@@ -48,9 +48,21 @@ public class BattleShipConsoleUI extends BattleShipUI {
     }
 
     @Override
+    protected String getFilePath() {
+        Scanner in = new Scanner(System.in);
+        System.out.print("Enter XML file path:");
+        return in.nextLine();
+    }
+
+    @Override
     protected void showGameLoadFailedMessage() {
         System.out.println("Failed To Load:");
-        //TODO ADD LOGIC TO PRINT REASON FOR LOADING ERROR
+        if(theGame.getLoadingError().length() > 0){
+            System.out.println(theGame.getLoadingError());
+        }
+        if(UIloadingError.length() > 0){
+            System.out.println(UIloadingError);
+        }
     }
 
     @Override
@@ -129,6 +141,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
                     showGameLoadedMessage();
                 }
                 else{
+                    theGame.setStatus(GameStatus.INIT);
                     showGameLoadFailedMessage();
                 }
                 break;
@@ -146,9 +159,12 @@ public class BattleShipConsoleUI extends BattleShipUI {
                 System.out.println("Current score: " + theGame.getCurrentPlayer().getScore() + ".");
                 break;
             case MAKE_A_MOVE:
-                makeMove();
+                MoveResults moveResult = makeMove();
                 if(theGame.getStatus() == GameStatus.OVER) {
                     publishWinnerResults();
+                }
+                else {
+                    showMoveResults(moveResult);
                 }
                 break;
             case GET_STATISTICS:
@@ -243,6 +259,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
     protected void showHitMessage() {
         System.out.println(theGame.getCurrentPlayer().getName().toString() + " Hit a battleship");
     }
+
     @Override
     protected void showBoardsTitles(String attacker, String defender) {
         System.out.print("Primary grid of " + attacker + ":");
