@@ -133,6 +133,7 @@ public class BattleShipConsoleUI extends BattleShipUI {
         }
         System.out.print("Your choice: ");
     }
+
     private void handleUserInput(int choice){
         switch(choice) {
             case LOAD_GAME:
@@ -190,8 +191,8 @@ public class BattleShipConsoleUI extends BattleShipUI {
             resPoint.setY(-1);
         }
         else{
-            resPoint.setX(playerInput.toCharArray()[0] - 'A');
-            resPoint.setY(playerInput.toCharArray()[1] - '1');
+            resPoint.setY(playerInput.toCharArray()[0] - 'A');
+            resPoint.setX(playerInput.toCharArray()[1] - '1');
         }
         return resPoint;
     }

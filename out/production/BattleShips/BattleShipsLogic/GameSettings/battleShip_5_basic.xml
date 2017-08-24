@@ -20,7 +20,7 @@
         <board>
             <ship>
                 <shipTypeId>shipTypeA</shipTypeId>
-                <position x="1" y="2" />
+                <position x="1" y="1" />
                 <direction>ROW</direction>
             </ship>
             <ship>
@@ -32,12 +32,12 @@
         <board>
             <ship>
                 <shipTypeId>shipTypeA</shipTypeId>
-                <position x="1" y="2" />
+                <position x="1" y="1" />
                 <direction>ROW</direction>
             </ship>
             <ship>
                 <shipTypeId>shipTypeB</shipTypeId>
-                <position x="3" y="3" />
+                <position x="2" y="3" />
                 <direction>COLUMN</direction>
             </ship>
         </board>

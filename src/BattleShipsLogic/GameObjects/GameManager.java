@@ -200,17 +200,17 @@ public class GameManager extends java.util.Observable{
         SeaItem[][] board = player.getBoard();
         for(int i = 0 ; i< playerShip.getLength(); i++) {
             // Set item to point to the battle ship. - x AND y ARE REPLACED IN ARRAY
-            if(isShipOutOfBounds(position.getY(),position.getX())){
+            if(isShipOutOfBounds(position.getX(),position.getY())){
                 isErrorLoading = true;
                 errorString+= "A Ship was placed outside of bounds (" + position.getX() +","+ position.getY() + ") for " + player.getName() + System.getProperty("line.separator");
             }else {
-                setShipInBoard(position.getY() - 1,position.getX() - 1, playerShip, board, player);
+                setShipInBoard(position.getX() - 1,position.getY() - 1, playerShip, board, player);
 
                 // Move to next item that should point the battle ship.
                 if (playerShip.getDirection() == ShipDirection.ROW) {
-                    position.setX(position.getX() + 1);
-                } else {
                     position.setY(position.getY() + 1);
+                } else {
+                    position.setX(position.getX() + 1);
                 }
             }
         }
@@ -272,8 +272,8 @@ public class GameManager extends java.util.Observable{
         // Update current player statistics.
         updateStatistics(moveTime);
         // Get attacked item in the attacked player grid.
-        int x = attackedPoint.getY();
-        int y = attackedPoint.getX();
+        int x = attackedPoint.getX();
+        int y = attackedPoint.getY();
         SeaItem attackedItem = attackedPlayer.getBoard()[x][y];
         if(attackedItem.IsDestroyed()){
             result = MoveResults.Used;
