@@ -89,6 +89,8 @@ public class GameManager extends java.util.Observable{
     }
 
     public boolean LoadGame(BattleShipGame gameSettings){
+        errorString = "";
+        isErrorLoading = false;
         if (GameType.BASIC == GameType.valueOf(gameSettings.getGameType())) {
             type = GameType.BASIC;
             loadBasicGame(gameSettings);
@@ -249,7 +251,7 @@ public class GameManager extends java.util.Observable{
         }
         else{
             isErrorLoading = true;
-            errorString += "Ships are overlapping in " + player.getName() + " board at (" + (x+1) + "," + (y+1) +")" + System.getProperty("line.separator");
+            errorString += "Ships are overlapping in " + player.getName() + " board at (" + (y+1) + "," + (x+1) +")" + System.getProperty("line.separator");
         }
     }
 
@@ -270,9 +272,9 @@ public class GameManager extends java.util.Observable{
         // Update current player statistics.
         updateStatistics(moveTime);
         // Get attacked item in the attacked player grid.
-        SeaItem attackedItem = attackedPlayer.getBoard()[attackedPoint.getX()][attackedPoint.getY()];
-        int x = attackedPoint.getX();
-        int y = attackedPoint.getY();
+        int x = attackedPoint.getY();
+        int y = attackedPoint.getX();
+        SeaItem attackedItem = attackedPlayer.getBoard()[x][y];
         if(attackedItem.IsDestroyed()){
             result = MoveResults.Used;
         }

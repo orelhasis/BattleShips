@@ -24,8 +24,7 @@ public abstract class BattleShipUI implements Observer{
     static final int NANO_SECONDS_IN_SECOND = 1000000000;
 
     protected GameManager theGame;
-
-
+    protected String UIloadingError;
     protected abstract void showWelcomeMessage();
     protected abstract void showGameLoadedMessage();
     protected abstract void showGameLoadFailedMessage();
@@ -33,24 +32,44 @@ public abstract class BattleShipUI implements Observer{
     protected abstract void printGameStartsMessage();
     protected abstract void publishWinnerResults();
     protected abstract void printStatistics();
+    protected abstract void showBoards(char[][] board, char[][] trackingboard);
+    protected abstract void showUsedMessage();
+    protected abstract void showDrownedMessage();
+    protected abstract void showHitAMineMessage();
+    protected abstract void showMissMessage();
+    protected abstract void showHitMessage();
+    protected abstract void showPrimaryGrid(Player player);
+    protected abstract void showTrackingGrid(Player player);
+    protected abstract void showBoard(char[][] board);
+    protected abstract String getFilePath();
 
     public BattleShipUI() {
         theGame = new GameManager();
         theGame.addObserver(this);
+        UIloadingError = "";
     }
 
     // Load game settings and initiate a game.
     protected Boolean loadGame() {
+        UIloadingError = "";
+        String filePath = getFilePath();
         boolean isLoadedSuccessfully;
         try {
             // Extract game settings.
-            File file = new File(GAME_SETTINGS_FILE_PATH);
-            JAXBContext jaxbContext = JAXBContext.newInstance(BattleShipGame.class);
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            BattleShipGame gameSettings = (BattleShipGame) jaxbUnmarshaller.unmarshal(file);
-            isLoadedSuccessfully = theGame.LoadGame(gameSettings);
+            //File file = new File(GAME_SETTINGS_FILE_PATH);
+            File file = new File(filePath);
+            if(!file.exists()){
+                UIloadingError+="File Does not Exist";
+                isLoadedSuccessfully = false;
+            }
+            else {
+                JAXBContext jaxbContext = JAXBContext.newInstance(BattleShipGame.class);
+                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                BattleShipGame gameSettings = (BattleShipGame) jaxbUnmarshaller.unmarshal(file);
+                isLoadedSuccessfully = theGame.LoadGame(gameSettings);
+            }
         } catch (JAXBException e) {
-            e.printStackTrace();
+            UIloadingError+="Bad XML file";
             isLoadedSuccessfully = false;
         }
         return isLoadedSuccessfully;
@@ -95,12 +114,6 @@ public abstract class BattleShipUI implements Observer{
         return theGame.makeMove(pointToAttack, moveTime);
     }
 
-    protected abstract void showPrimaryGrid(Player player);
-
-    protected abstract void showTrackingGrid(Player player);
-
-    protected abstract void showBoard(char[][] board);
-
     protected void showMoveResults(MoveResults moveResults){
         switch (moveResults){
             case Hit:
@@ -129,18 +142,6 @@ public abstract class BattleShipUI implements Observer{
             theGame.setCurrentPlayer(theGame.getPlayers()[0]);
         }
     }
-
-    protected abstract void showBoards(char[][] board, char[][] trackingboard);
-
-    protected abstract void showUsedMessage();
-
-    protected abstract void showDrownedMessage();
-
-    protected abstract void showHitAMineMessage();
-
-    protected abstract void showMissMessage();
-
-    protected abstract void showHitMessage();
 
     protected String calcTime(int numberOfSeconds) {
         String secondsStr = (Integer.toString(numberOfSeconds%60));
