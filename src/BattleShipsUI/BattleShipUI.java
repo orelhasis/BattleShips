@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.Observer;
 
 public abstract class BattleShipUI implements Observer{
-    static final String GAME_SETTINGS_FILE_PATH = "battleShip_5_basic.xml";
+
     static final int LOAD_GAME = 1;
     static final int START_GAME = 2;
     static final int GET_GAME_STATUS = 3;
@@ -32,14 +32,12 @@ public abstract class BattleShipUI implements Observer{
     protected abstract void printGameStartsMessage();
     protected abstract void publishWinnerResults();
     protected abstract void printStatistics();
-    protected abstract void showBoards(char[][] board, char[][] trackingboard);
+    protected abstract void showBoards(char[][] board, char[][] trackingboard, String attackPlayerName, String attackedPlayerName);
     protected abstract void showUsedMessage();
     protected abstract void showDrownedMessage();
     protected abstract void showHitAMineMessage();
     protected abstract void showMissMessage();
     protected abstract void showHitMessage();
-    protected abstract void showPrimaryGrid(Player player);
-    protected abstract void showTrackingGrid(Player player);
     protected abstract void showBoard(char[][] board);
     protected abstract String getFilePath();
 
@@ -103,11 +101,8 @@ public abstract class BattleShipUI implements Observer{
         if(theGame.getPlayers()[0] == player) {
             otherPlayer = theGame.getPlayers()[1];
         }
-        showBoardsTitles(player.getName().toString(), otherPlayer.getName().toString());
-        showBoards(player.getPlayerPrimaryGrid(),otherPlayer.getPlayerTrackingGrid());
-    }
-
-    protected void showBoardsTitles(String attacker, String defender) {
+        //showBoardsTitles(player.getName().toString(), otherPlayer.getName().toString());
+        showBoards(player.getPlayerPrimaryGrid(), otherPlayer.getPlayerTrackingGrid(), player.getName().toString(), otherPlayer.getName().toString());
     }
 
     protected MoveResults attackAPoint(Point pointToAttack, int moveTime) {

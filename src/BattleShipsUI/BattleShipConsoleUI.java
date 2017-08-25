@@ -2,7 +2,6 @@ package BattleShipsUI;
 
 import BattleShipsLogic.Definitions.GameStatus;
 import BattleShipsLogic.Definitions.MoveResults;
-import BattleShipsLogic.GameObjects.Player;
 import BattleShipsLogic.GameObjects.Point;
 
 import java.util.Observable;
@@ -203,19 +202,6 @@ public class BattleShipConsoleUI extends BattleShipUI {
     }
 
     @Override
-    protected void showPrimaryGrid(Player player) {
-        char[][] playerPrimaryGrid = player.getPlayerPrimaryGrid();
-        System.out.println("Primary grid of " + player.getName().toString());
-        showBoard(playerPrimaryGrid);
-    }
-
-    @Override
-    protected void showTrackingGrid(Player player) {
-        System.out.println("Tracking grid of " + player.getName().toString());
-        showBoard(player.getPlayerTrackingGrid());
-    }
-
-    @Override
     protected void showBoard(char[][] board) {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
@@ -263,29 +249,11 @@ public class BattleShipConsoleUI extends BattleShipUI {
     }
 
     @Override
-    protected void showBoardsTitles(String attacker, String defender) {
-        System.out.print("Primary grid of " + attacker + ":");
-        System.out.println("     Tracking grid for " + defender + ":");
-    }
+    protected void showBoards(char[][] board,char[][] trackingboard, String attackPlayerName, String attackedPlayerName) {
 
-    @Override
-    protected void showBoards(char[][] board,char[][] trackingboard) {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                System.out.print(" "+board[i][j]+" |");
-                if(j == board.length-1) {
-                    System.out.print(" ");
-                }
-            }
-            System.out.print("   ");
-            for (int j = 0; j < trackingboard.length; j++) {
-                System.out.print(" "+trackingboard[i][j]+" |");
-                if(j == trackingboard.length-1) {
-                    System.out.println(" ");
-                }
-            }
-            System.out.println("   ---------------------       ---------------------");
-        }
+        System.out.println("Primary grid of " + attackPlayerName + ":");
+        showBoard(board);
+        System.out.println("Tracking grid of " + attackedPlayerName + ":");
+        showBoard(trackingboard);
     }
-
 }
