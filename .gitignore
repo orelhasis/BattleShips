@@ -40,6 +40,7 @@ cmake-build-debug/
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 .idea/workspace.xml
+*/workspace.xml
 # JIRA plugin
 atlassian-ide-plugin.xml
 
