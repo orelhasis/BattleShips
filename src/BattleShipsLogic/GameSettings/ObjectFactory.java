@@ -1,5 +1,4 @@
-
-package mypackage;
+package BattleShipsLogic.GameSettings;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
